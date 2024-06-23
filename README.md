@@ -35,14 +35,14 @@ terraform destroy -var="admin_username=null" -var="admin_password=null"
 ## select terraform workspace for prod env and run terraform destroy
   terraform workspace select prod
   
-  terraform apply -var-file prod.tfvars
+  terraform destroy -var-file prod.tfvars
 
 ## select terraform workspace for int env and run terraform destroy
   terraform workspace select int
   
-  terraform apply -var-file int.tfvars
+  terraform destroy -var-file int.tfvars
 
 ## select terraform workspace for dev env and run terraform destroy
   terraform workspace select dev
   
-  terraform apply -var-file dev.tfvars
+  terraform destroy -var-file dev.tfvars
