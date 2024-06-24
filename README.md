@@ -16,7 +16,9 @@ chmod 400 private-key-name
 
 ## create terraform workspaces
   terraform workspace new prod
+  
   terraform workspace new int
+  
   terraform workspace new dev
 
 ## list terraform workspaces
