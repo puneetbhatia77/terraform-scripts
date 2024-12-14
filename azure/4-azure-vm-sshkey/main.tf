@@ -14,6 +14,7 @@ provider "azurerm" {
        prevent_deletion_if_contains_resources = false
      }
    }
+subscription_id = "be40f85a-7ca1-48fb-bfb5-11fe1320e9a8"
 }
 
 # Create a resource group if it doesn't exist
@@ -160,8 +161,8 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
     source_image_reference {
         publisher = "Canonical"
-        offer     = "UbuntuServer"
-        sku       = "18.04-LTS"
+        offer     = "0001-com-ubuntu-server-jammy"
+        sku       = "22_04-lts-gen2"
         version   = "latest"
     }
 

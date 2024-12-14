@@ -4,6 +4,7 @@ provider "azurerm" {
        prevent_deletion_if_contains_resources = false
      }
   }
+subscription_id = "be40f85a-7ca1-48fb-bfb5-11fe1320e9a8"
 }
 
 # Create a resource group
@@ -26,6 +27,25 @@ resource "azurerm_subnet" "Subnet" {
   address_prefixes     = ["192.168.1.0/24"]
 }
 
+# Create Network Security Group and rule
+resource "azurerm_network_security_group" "nsg" {
+  name                = "myTFNSG"
+  location            = "Central India"
+  resource_group_name = azurerm_resource_group.Production.name
+
+  security_rule {
+    name                       = "SSH"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
   resource "azurerm_network_interface" "Nic" {
   name                = var.network_interface_name
   location            = azurerm_resource_group.Production.location
@@ -39,11 +59,17 @@ resource "azurerm_subnet" "Subnet" {
   }
 }
 
+# Connect the security group to the network interface
+resource "azurerm_network_interface_security_group_association" "example" {
+    network_interface_id      = azurerm_network_interface.Nic.id
+    network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
 resource "azurerm_public_ip" "PUB_IP" {
   name                = var.public_ip_name
   resource_group_name = azurerm_resource_group.Production.name
   location            = azurerm_resource_group.Production.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 }
 
 resource "azurerm_virtual_machine" "ProdSrv" {

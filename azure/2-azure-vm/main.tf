@@ -14,6 +14,7 @@ provider "azurerm" {
        prevent_deletion_if_contains_resources = false
      }
    }
+subscription_id = "be40f85a-7ca1-48fb-bfb5-11fe1320e9a8"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -96,6 +97,12 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
+# Connect the security group to the network interface
+resource "azurerm_network_interface_security_group_association" "example" {
+    network_interface_id      = azurerm_network_interface.nic.id
+    network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
 # Create a Linux virtual machine
 resource "azurerm_virtual_machine" "vm" {
   name                  = "myTFVM"
@@ -113,8 +120,8 @@ resource "azurerm_virtual_machine" "vm" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "16.04.0-LTS"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts-gen2"
     version   = "latest"
   }
 
